@@ -1,15 +1,22 @@
-import { openBigPicture } from './big_view.js';
+import { openBigPicture } from './big-view.js';
 
-const pictureTemplate = document.querySelector('#picture').content;
+const DELAY = 500;
+const FILTERS_BUTTON_ACTIVE = 'img-filters__button--active';
+
+const Filters = {
+  DEFAULT: 'filter-default',
+  RANDOM: 'filter-random',
+  DISCUSSED: 'filter-discussed'
+};
+
+const pictureContent = document.querySelector('#picture').content;
 const windowPictures = document.querySelector('.pictures');
-const picture = pictureTemplate.querySelector('.picture');
+const picture = pictureContent.querySelector('.picture');
 
 const buttonDefault = document.querySelector('[id=filter-default]');
 const buttonRandom = document.querySelector('[id=filter-random]');
 const buttonDiscussed = document.querySelector('[id=filter-discussed]');
 const lastPosts = new Set();
-
-const DELAY = 500;
 
 const renderPicture = (post) => {
   const clonePicture = picture.cloneNode(true);
@@ -48,36 +55,35 @@ const renderPostsFromServer = (posts) => {
   for (const post of posts){
     allPosts.add(post);
   }
-  debugger
   const imgFilters = document.querySelector('.img-filters');
-  imgFilters.classList.remove('.img-filters--inactive');
+  imgFilters.classList.remove('img-filters--inactive');
   const filtersForm = document.querySelector('.img-filters__form');
-  let currentFilter = 'filter-default';
+  let currentFilter = Filters.DEFAULT;
   let timeoutId;
 
   filtersForm.addEventListener('click', (evt) => {
     let renderingPosts;
     switch (evt.target.id) {
-      case 'filter-default':
+      case Filters.DEFAULT:
         renderingPosts = allPosts;
-        buttonDefault.classList.add('img-filters__button--active');
-        buttonRandom.classList.remove('img-filters__button--active');
-        buttonDiscussed.classList.remove('img-filters__button--active');
+        buttonDefault.classList.add(FILTERS_BUTTON_ACTIVE);
+        buttonRandom.classList.remove(FILTERS_BUTTON_ACTIVE);
+        buttonDiscussed.classList.remove(FILTERS_BUTTON_ACTIVE);
         break;
 
-      case 'filter-random':
+      case Filters.RANDOM:
         renderingPosts = posts.sort(() => Math.random() - 0.5);
         renderingPosts.length = 10;
-        buttonDefault.classList.remove('img-filters__button--active');
-        buttonRandom.classList.add('img-filters__button--active');
-        buttonDiscussed.classList.remove('img-filters__button--active');
+        buttonDefault.classList.remove(FILTERS_BUTTON_ACTIVE);
+        buttonRandom.classList.add(FILTERS_BUTTON_ACTIVE);
+        buttonDiscussed.classList.remove(FILTERS_BUTTON_ACTIVE);
         break;
 
-      case 'filter-discussed':
+      case Filters.DISCUSSED:
         renderingPosts = posts.sort((a, b) => b.comments.length - a.comments.length);
-        buttonDefault.classList.remove('img-filters__button--active');
-        buttonRandom.classList.remove('img-filters__button--active');
-        buttonDiscussed.classList.add('img-filters__button--active');
+        buttonDefault.classList.remove(FILTERS_BUTTON_ACTIVE);
+        buttonRandom.classList.remove(FILTERS_BUTTON_ACTIVE);
+        buttonDiscussed.classList.add(FILTERS_BUTTON_ACTIVE);
         break;
 
       default:

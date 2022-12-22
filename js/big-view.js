@@ -26,6 +26,7 @@ const commentConstructor = (comment) => {
 
   return li;
 };
+
 const moreCommentsLoader = () => {
   for (let i = counter; i < counter + 5; i++) {
     const counterStr= ` из ${comments.length} комментариев`;
@@ -39,13 +40,6 @@ const moreCommentsLoader = () => {
     commentCounter.textContent = `${i+1}${counterStr}`;
   }
   counter += 5;
-};
-
-const escClose = (evt) => {
-  if (isEsc(evt)) {
-    evt.preventDefault();
-    closeBigPicture();
-  }
 };
 
 const closeBigPicture = () => {
@@ -96,5 +90,12 @@ const openBigPicture = (post) => {
     counter = i + 1;
   }
 };
+
+function escClose (evt) {
+  if (isEsc(evt)) {
+    evt.preventDefault();
+    closeBigPicture();
+  }
+}
 
 export { openBigPicture };
